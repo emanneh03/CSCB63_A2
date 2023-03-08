@@ -100,7 +100,6 @@ void swap(MinHeap* heap, int index1, int index2) {
 }
 
 
-
 /* Bubbles up the element newly inserted into minheap 'heap' at index
  * 'nodeIndex', if 'nodeIndex' is a valid index for heap. Has no effect
  * otherwise.
@@ -123,7 +122,7 @@ void bubbleUp(MinHeap* heap, int nodeIndex) {
 int minIdx(MinHeap* heap, int parent_node) {
     int left_child = leftIdx(heap, parent_node);
     int right_child = rightIdx(heap, parent_node);
-    return priorityAt(heap, left_child) < priorityAt(heap, right_child) ? ++left_child : ++right_child;
+    return priorityAt(heap, left_child) < priorityAt(heap, right_child) ? left_child : right_child;
 }
 
 
@@ -135,7 +134,7 @@ void bubbleDown(MinHeap* heap) {
     int parent_node = ROOT_INDEX;
     while (isValidIndex(heap, minIdx(heap, parent_node))) {
         int min_child = minIdx(heap, parent_node);
-        if (priorityAt(heap, min_child) > priorityAt(heap, parent_node)) {
+        if (priorityAt(heap, min_child) < priorityAt(heap, parent_node)) {
             swap(heap, parent_node, min_child);
         }
         parent_node = min_child;
@@ -177,6 +176,7 @@ HeapNode extractMin(MinHeap* heap) {
         heap->indexMap[min_node.id] = ROOT_INDEX - 1;
         heap->size--;
         bubbleDown(heap);
+//        bubbleUp(heap, heap->size);
         return min_node;
     }
 }
