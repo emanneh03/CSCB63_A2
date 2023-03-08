@@ -85,13 +85,17 @@ int parentIdx(MinHeap* heap, int nodeIndex) {
  * otherwise.
  */
 void swap(MinHeap* heap, int index1, int index2) {
-    //capacity or size?
     if (heap == NULL) return;
     if (isValidIndex(heap, index1) && isValidIndex(heap, index2)) {
-        //pointer?
+        int id1 = heap->arr[index1].id;
+        int id2 = heap->arr[index2].id;
         HeapNode temp = heap->arr[index1];
         heap->arr[index1] = heap->arr[index2];
         heap->arr[index2] = temp;
+        heap->indexMap[id1] = index2;
+        heap->indexMap[id2] = index1;
+        heap->arr[index1].id = id2;
+        heap->arr[index2].id = id1;
     }
 }
 
@@ -170,6 +174,7 @@ HeapNode extractMin(MinHeap* heap) {
     if (heap != NULL) {
         HeapNode min_node = getMin(heap);
         swap(heap, ROOT_INDEX, heap->size);
+        heap->indexMap[min_node.id] = ROOT_INDEX - 1;
         heap->size--;
         bubbleDown(heap);
         return min_node;
@@ -189,7 +194,7 @@ void insert(MinHeap* heap, int priority, void* value) {
         heap->arr[heap->size].priority = priority;
         heap->arr[heap->size].value = value;
         heap->arr[heap->size].id = heap->size;
-        heap->indexMap[heap->size] = priorityAt(heap, heap->size);
+        heap->indexMap[heap->arr[heap->size].id] = heap->size;
         bubbleUp(heap, heap->size);
     }
 }
