@@ -184,9 +184,12 @@ HeapNode extractMin(MinHeap* heap) {
 void insert(MinHeap* heap, int priority, void* value) {
     if (heap != NULL) {
         if (heap->size == heap->capacity) doubleCapacity(heap);
+        int id = heap->size;
         heap->size++;
         heap->arr[heap->size].priority = priority;
         heap->arr[heap->size].value = value;
+        heap->arr[heap->size].id = heap->size;
+        heap->indexMap[heap->size] = priorityAt(heap, heap->size);
         bubbleUp(heap, heap->size);
     }
 }
